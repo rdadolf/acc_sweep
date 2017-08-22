@@ -1,3 +1,4 @@
+import os
 import os.path
 import tempfile
 import distutils.dir_util
@@ -9,6 +10,15 @@ class SweepDirectory(object):
     assert os.path.exists(root), 'Root directory does not exist'
     self.root = os.path.abspath(root)
     self.expdir = None # No active experiment
+    self.jid = 0
+
+  def _jid2pair(self, jid):
+    assert jid<256*256, 'Job ID overflow. Too many jobs.'
+    prefix = '%02x' % (jid//256)
+    suffix = '%02x' % (jid%256)
+    return (prefix,suffix)
+  def _pair2jid(self, prefix, suffix):
+    return int(prefix,16)*256 + int(suffix,16)
 
   def create_experiment(self, name=None):
     '''Create a new experiment directory.
@@ -57,4 +67,19 @@ class SweepDirectory(object):
 
     distutils.dir_util.copy_tree(source, target)
     
+  def new_job(self):
+    assert self.expdir is not None, 'Must set an active experiment before modifying one.'
+    jid = self.jid
+    self.jid += 1
 
+    # Create new job directory(ies)
+    prefix,suffix = self._jid2pair(jid)
+    prefix_dir = os.path.join(self.expdir,prefix)
+    if not os.path.isdir(prefix_dir):
+      os.mkdir(prefix_dir)
+    suffix_dir = os.path.join(prefix_dir,suffix)
+    assert not os.path.isdir(suffix_dir), 'Error: attempted to overwrite a job directory.'
+    os.mkdir(suffix_dir)
+    jobdir = os.path.abspath(suffix_dir)
+
+    return jobdir

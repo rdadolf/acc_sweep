@@ -26,3 +26,10 @@ class TestSweepDirectory(TestCase):
       swpd = SweepDirectory(d)
       xd = swpd.create_experiment()
       assert os.path.isdir(xd), 'No experiment directory created.'
+
+  def test_new_job(self):
+    with TempDir() as d:
+      swpd = SweepDirectory(d)
+      xd = swpd.create_experiment()
+      jobdir = swpd.new_job()
+      assert os.path.isdir(jobdir)
