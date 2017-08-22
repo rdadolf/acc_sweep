@@ -1,0 +1,2 @@
+class CondorTemplate(object):
+  pass

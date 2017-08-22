@@ -1,0 +1,10 @@
+language: python
+script:
+  - pytest
+# A nudge to avoid checking in broken builds.
+notifications:
+  email:
+    on_success: never
+    on_failure: always
+    recipients:
+      - rdadolf@gmail.com
