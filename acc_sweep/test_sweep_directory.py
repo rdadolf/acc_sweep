@@ -31,5 +31,15 @@ class TestSweepDirectory(TestCase):
     with TempDir() as d:
       swpd = SweepDirectory(d)
       xd = swpd.create_experiment()
-      jobdir = swpd.new_job()
-      assert os.path.isdir(jobdir)
+      _,jobdir = swpd.new_job()
+      assert os.path.isdir(jobdir), 'Didnt create job directory.'
+
+  def test_get_job_directory(self):
+    
+    with TempDir() as d:
+      swpd = SweepDirectory(d)
+      xd = swpd.create_experiment()
+      jid,jobdir = swpd.new_job()
+      jobdir2 = swpd.get_job_directory(jid)
+      assert jobdir==jobdir2, 'Job directories dont match.'
+

@@ -11,6 +11,7 @@ class SweepDirectory(object):
     self.root = os.path.abspath(root)
     self.expdir = None # No active experiment
     self.jid = 0
+    self.jobs = []
 
   def _jid2pair(self, jid):
     assert jid<256*256, 'Job ID overflow. Too many jobs.'
@@ -82,4 +83,8 @@ class SweepDirectory(object):
     os.mkdir(suffix_dir)
     jobdir = os.path.abspath(suffix_dir)
 
-    return jobdir
+    return jid, jobdir
+
+  def get_job_directory(self, jid):
+    return os.path.join(self.expdir, os.path.join(*self._jid2pair(jid)))
+
