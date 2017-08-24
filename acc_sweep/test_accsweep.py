@@ -8,17 +8,21 @@ from .accsweep import ACCSweep
 class TestACCSweep(TestCase):
   def test_init(self):
     with TempDir() as root:
-      ACCSweep(root)
+      ACCSweep(root,condor_file=os.path.join(root,'out.condor'))
 
   def test_create_experiment(self):
     with TempDir() as root:
-      swp = ACCSweep(root)
-      swp.create_experiment(tag='test-experiment')
+      swp = ACCSweep(root,condor_file=os.path.join(root,'out.condor'))
+      template = os.path.join(root,'template.condor')
+      open(template,'w')
+      swp.create_experiment(tag='test-experiment',template=template)
 
   def test_create_jobdir(self):
     with TempDir() as root:
-      swp = ACCSweep(root)
-      swp.create_experiment(tag='test-experient')
+      swp = ACCSweep(root,condor_file=os.path.join(root,'out.condor'))
+      template = os.path.join(root,'template.condor')
+      open(template,'w')
+      swp.create_experiment(tag='test-experiment',template=template)
       job = swp.create_job()
       assert os.path.isdir(swp.get_job_directory(job)), 'Didnt create job directory 1'
       job = swp.create_job()
@@ -26,8 +30,10 @@ class TestACCSweep(TestCase):
 
   def test_job_copy_file(self):
     with TempDir() as root:
-      swp = ACCSweep(root)
-      swp.create_experiment(tag='test-experient')
+      swp = ACCSweep(root,condor_file=os.path.join(root,'out.condor'))
+      template = os.path.join(root,'template.condor')
+      open(template,'w')
+      swp.create_experiment(tag='test-experiment',template=template)
 
       for i in xrange(0,3):
         testf=os.path.join(root,'testfile')
