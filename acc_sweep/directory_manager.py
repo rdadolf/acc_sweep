@@ -1,4 +1,3 @@
-import errno
 from functools import reduce
 import math
 import os
@@ -10,7 +9,7 @@ class DirectoryManager(object):
     assert os.path.exists(root), 'Root directory does not exist'
     self.root = os.path.abspath(root)
     self.xpath = None
-  
+
     self.job_levels = job_levels
     self.jobs_per_level = jobs_per_level
     self.max_jobs = jobs_per_level**job_levels
@@ -30,7 +29,7 @@ class DirectoryManager(object):
     assert os.path.exists(source), 'Source does not exist: '+str(source)
     assert os.path.isdir(target), 'Target directory does not exist: '+str(target)
 
-    # Try to catch the situation where the caller is copying a directory 
+    # Try to catch the situation where the caller is copying a directory
     # containing the experiment directory. (This will fall into a disk-eating
     # infinite loop.)
     pfx = os.path.commonprefix([source,target])

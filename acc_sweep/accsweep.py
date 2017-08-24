@@ -1,6 +1,5 @@
 import os
 import os.path
-import shutil
 
 from .common import timestamp
 from .directory_manager import DirectoryManager
@@ -46,7 +45,7 @@ class ACCSweep(object):
   def copy_to_experiment(self, file_or_directory):
     assert os.path.isdir(self.xpath), 'Create an experiment before copying files to it.'
     self.drm.copy_to_experiment(file_or_directory)
-    
+
 
   def set_template(self, templatefile):
     self.condor = CondorTemplate(templatefile)

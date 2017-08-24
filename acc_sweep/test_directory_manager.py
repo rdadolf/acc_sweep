@@ -43,7 +43,7 @@ class TestDirectoryManager(TestCase):
   def test_copy_to_job(self):
     with TempDir() as d:
       drm = DirectoryManager(d, job_levels=1, jobs_per_level=16)
-      xdir = drm.create_experiment_directory('test-experiment-please-ignore')
+      drm.create_experiment_directory('test-experiment-please-ignore')
       jdir = drm.create_job_directory(0)
       testf = os.path.join(d,'testfile')
       open(testf,'w')
