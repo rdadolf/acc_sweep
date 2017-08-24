@@ -10,31 +10,32 @@ class TestACCSweep(TestCase):
     with TempDir() as root:
       ACCSweep(root)
 
-  def test_set_experiment(self):
+  def test_create_experiment(self):
     with TempDir() as root:
       swp = ACCSweep(root)
-      swp.set_experiment(tag='test-experiment')
+      swp.create_experiment(tag='test-experiment')
 
   def test_create_jobdir(self):
     with TempDir() as root:
       swp = ACCSweep(root)
-      swp.set_experiment(tag='test-experient')
+      swp.create_experiment(tag='test-experient')
       job = swp.create_job()
-      assert os.path.isdir(job.dir), 'Didnt create job directory 1'
+      assert os.path.isdir(swp.get_job_directory(job)), 'Didnt create job directory 1'
       job = swp.create_job()
-      assert os.path.isdir(job.dir), 'Didnt create job directory 2'
+      assert os.path.isdir(swp.get_job_directory(job)), 'Didnt create job directory 2'
 
   def test_job_copy_file(self):
     with TempDir() as root:
       swp = ACCSweep(root)
-      swp.set_experiment(tag='test-experient')
+      swp.create_experiment(tag='test-experient')
 
       for i in xrange(0,3):
-        with open('testfile','w') as f:
+        testf=os.path.join(root,'testfile')
+        with open(testf,'w') as f:
           f.write(str(i))
         job = swp.create_job()
-        job.copy_file('testfile')
-        jobfile = os.path.join(job.dir,'testfile')
+        swp.copy_to_job(job,testf)
+        jobfile = os.path.join(swp.get_job_directory(job),'testfile')
         assert os.path.isfile(jobfile), 'Didnt copy job file'
         with open(jobfile,'r') as f2:
           assert f2.read().strip()==str(i), 'Jobfile content incorrect'

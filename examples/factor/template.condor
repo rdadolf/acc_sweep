@@ -1,0 +1,9 @@
+universe = docker
+notification = never
+should_transfer_files = no
+request_memory = 100m
+docker_image = harvardacc/clusterbase
+output = stdout
+error = stderr
+log = condorlog
+executable=$(accsweep::experiment_dir)/run.py

@@ -6,3 +6,5 @@ class CondorTemplate(object):
     self.tfile = templatefile
 
 
+  def substitute(self, kv):
+    pass
