@@ -1,5 +1,3 @@
-from sweep_directory import SweepDirectory
-from condor_templates import CondorTemplate
+from accsweep import ACCSweep
 
-#__all__=['SweepDirectory', 'CondorTemplate'] # NYI
-__all__=['SweepDirectory']
+__all__=['ACCSweep']

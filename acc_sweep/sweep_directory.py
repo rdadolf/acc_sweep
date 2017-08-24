@@ -9,9 +9,7 @@ class SweepDirectory(object):
   def __init__(self, root):
     assert os.path.exists(root), 'Root directory does not exist'
     self.root = os.path.abspath(root)
-    self.expdir = None # No active experiment
-    self.jid = 0
-    self.jobs = []
+    self._xpath = None
 
   def _jid2pair(self, jid):
     assert jid<256*256, 'Job ID overflow. Too many jobs.'
@@ -21,21 +19,18 @@ class SweepDirectory(object):
   def _pair2jid(self, prefix, suffix):
     return int(prefix,16)*256 + int(suffix,16)
 
-  def create_experiment(self, name=None):
-    '''Create a new experiment directory.
+  def _xpath_from_tag(self, tag):
+    s = os.path.join(self.root,str(tag))
+    print s
+    return s
 
-    If 'name' is not specified, this function will create a new, unique name.
-    The names generated are guaranteed to be unique, so it is suggested you
-    run in this mode.
-    Note that timestamps are calculated from the time this function is called.'''
-    tstr = timestamp() 
-    self.expdir = os.path.normpath(tempfile.mkdtemp(prefix='x', suffix='-'+tstr,dir=self.root))
-    return self.expdir
-    
-  def set_experiment(self, name):
-    self.expdir = os.path.normpath(os.path.join(self.root, name))
-    assert os.path.isdir(expdir), 'No such experiment.'
-    return self.expdir
+  def set_experiment(self, tag):
+    '''Assign the current experiment and create a directory if necessary.'''
+    self._xpath = self._xpath_from_tag(tag)
+    if not os.path.exists(self._xpath):
+      os.mkdir(self._xpath)
+    assert os.path.isdir(self._xpath)
+    return self._xpath
 
   def snapshot(self, source):
     '''Create a static copy of a file or directory.
