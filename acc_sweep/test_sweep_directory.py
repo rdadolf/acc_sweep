@@ -1,11 +1,11 @@
-from unittest import TestCase 
+from unittest import TestCase
 from .test_utils import TempDir
 from .sweep_directory import *
 
 import os.path
 
 class TestSweepDirectory(TestCase):
-  
+
   def test_init(self):
     with TempDir() as d:
       swpd = SweepDirectory(d)

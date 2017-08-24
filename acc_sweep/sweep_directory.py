@@ -1,23 +1,12 @@
 import os
 import os.path
-import tempfile
 import distutils.dir_util
-
-from .common import timestamp
 
 class SweepDirectory(object):
   def __init__(self, root):
     assert os.path.exists(root), 'Root directory does not exist'
     self.root = os.path.abspath(root)
     self._xpath = None
-
-  def _jid2pair(self, jid):
-    assert jid<256*256, 'Job ID overflow. Too many jobs.'
-    prefix = '%02x' % (jid//256)
-    suffix = '%02x' % (jid%256)
-    return (prefix,suffix)
-  def _pair2jid(self, prefix, suffix):
-    return int(prefix,16)*256 + int(suffix,16)
 
   def _xpath_from_tag(self, tag):
     s = os.path.join(self.root,str(tag))
@@ -62,7 +51,7 @@ class SweepDirectory(object):
     # FIXME: for exclude paths, we'll need shutil.copytree
 
     distutils.dir_util.copy_tree(source, target)
-    
+
   def new_job(self):
     assert self.expdir is not None, 'Must set an active experiment before modifying one.'
     jid = self.jid
