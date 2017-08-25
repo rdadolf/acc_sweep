@@ -1,0 +1,10 @@
+universe = docker
+notification = never
+should_transfer_files = no
+request_memory = 100m
+docker_image = accsweep_example
+output = stdout
+error = stderr
+log = condorlog
+executable=/usr/bin/python
+arguments="accsweep::experiment_dir/madlib.py accsweep::experiment_dir/blanks.txt fills.json"
